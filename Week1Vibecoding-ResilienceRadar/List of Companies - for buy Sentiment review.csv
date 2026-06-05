@@ -1,0 +1,31 @@
+company_name,industry,ticker,hq_country,primary_sc_risk
+Apple Inc.,Tech & Semiconductors,AAPL,USA,Geopolitical concentration
+Qualcomm,Tech & Semiconductors,QCOM,USA,Single-source manufacturing
+Dell Technologies,Tech & Semiconductors,DELL,USA,Component availability
+Samsung,Tech & Semiconductors,5930,South Korea,Geopolitical exposure
+SK Hynix,Tech & Semiconductors,660,South Korea,Raw material volatility
+Audi,Automotive,NSU,Germany,EV transition & platform consolidation risk
+Toyota,Automotive,TM,Japan,Natural disaster & single-source exposure
+BMW,Automotive,BMW,Germany,Battery raw material risk
+Parker Hannifin,Automotive,PH,USA,Supplier concentration
+Robert Bosch,Automotive,BOSCH,Germany,Multi-tier visibility
+Walmart,Retail & Consumer,WMT,USA,Import & logistics dependency
+Procter & Gamble,Retail & Consumer,PG,USA,Commodity input volatility
+Costco,Retail & Consumer,COST,USA,Port & logistics disruption
+Mondelez,Retail & Consumer,MDLZ,USA,Agricultural commodity risk
+L'Oreal,Retail & Consumer,OR,France,Ingredient sourcing risk
+Johnson & Johnson,Pharma,JNJ,USA,Regulatory & single-source risk
+Pfizer,Pharma,PFE,USA,API geographic concentration
+McKesson,Pharma,MCK,USA,Distribution & cold chain risk
+Bristol-Myers Squibb,Pharma,BMY,USA,Specialty ingredient scarcity
+Eli Lilly,Pharma,LLY,USA,Manufacturing capacity constraint
+Textron,Industrial & A&D,TXT,USA,Sole-source supplier risk
+Lockheed Martin,Industrial & A&D,LMT,USA,Multi-tier supplier visibility
+Boeing,Industrial & A&D,BA,USA,Supplier quality & production capacity
+TransDigm,Industrial & A&D,TDG,USA,Sole-source component dependency
+Honeywell,Industrial & A&D,HON,USA,Geopolitical & multi-tier risk
+Equinix,Data Center,EQIX,USA,Power infrastructure availability
+Vertiv,Data Center,VRT,USA,Component lead time risk
+Schneider Electric,Data Center,SU,France,Raw material cost volatility
+Supermicro,Data Center,SMCI,USA,Geopolitical concentration
+Corning,Data Center,GLW,USA,Specialty material scarcity

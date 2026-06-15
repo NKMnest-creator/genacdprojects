@@ -1,0 +1,152 @@
+[
+  {
+    "question": "How many times has Brazil won the World Cup?",
+    "rag1": "Brazil has won the World Cup **5 times**, making them the most successful World Cup team in history (soccer, history, page 12). They are also the only nation to have played in every World Cup tournament to date (soccer, history, page 12).",
+    "rag2": "Brazil has won the World Cup **5 times**, making them the most successful World Cup team in history (soccer, history, page 12). They are also the only nation to have played in every World Cup tournament to date (soccer, history, page 12).",
+    "plain1": "Brazil has won the FIFA World Cup **5 times** (1958, 1962, 1970, 1994, and 2002), making them the most successful nation in World Cup history. They are the only team to have won the tournament five times.",
+    "plain2": "Brazil has won the FIFA World Cup **5 times** (1958, 1962, 1970, 1994, and 2002), making them the most successful nation in World Cup history. They are the only country to have won the tournament five times.",
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "12"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "21"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "21"
+      }
+    ]
+  },
+  {
+    "question": "What are the rules for leg before wicket in cricket?",
+    "rag1": "# Leg Before Wicket (LBW) Rules in Cricket\n\nAccording to the rules, a batter is out LBW if the following conditions are met (cricket, rules, page 11):\n\n1. **The ball hits the batter without first hitting the bat**\n2. **The ball would have hit the wicket** if the batter was not there\n3. **The ball does not pitch on the leg side of the wicket**\n\nHowever, there is an important exception: **if the ball strikes the batter outside the line of the off-stump AND the batter was attempting to play a stroke, the batter is not out** (cricket, rules, page 11).\n\nIn essence, LBW protects batters from being dismissed when they legitimately attempt to play a shot, but prevents them from using their body as an illegal shield to protect the wicket.",
+    "rag2": "# Leg Before Wicket (LBW) Rules in Cricket\n\nAccording to the rules, a batter is out LBW if:\n\n1. **The ball hits the batter without first hitting the bat**, AND\n2. **The ball would have hit the wicket** if the batter was not there, AND\n3. **The ball does not pitch on the leg side of the wicket**\n\nHowever, there is an important exception: **if the ball strikes the batter outside the line of the off-stump while the batter was attempting to play a stroke, the batter is not out.** (cricket, rules, page 11)",
+    "plain1": "# Leg Before Wicket (LBW) in Cricket\n\nA batter is out LBW if a ball hits their body (usually the legs) and would have gone on to hit the stumps, even if it didn't actually make contact with the wicket.\n\n**Key conditions:**\n- The ball must be pitched in line with the stumps or outside leg stump\n- The batter's body must be between the ball and the stumps\n- The ball must be heading toward the stumps (umpire's judgment)\n- The batter cannot be out LBW if the ball pitches outside leg stump, unless they're attempting to play a shot\n\n**Important notes:**\n- If the batter is attempting to play a legitimate cricket shot and misses, they can still be out LBW\n- If the ball pitches outside leg stump, the batter is protected from LBW\n- The umpire makes the final decision on whether the ball would have hit the stumps\n\nLBW is one of cricket's most debated dismissals because it relies on the umpire's judgment about where the ball would have traveled.",
+    "plain2": "# Leg Before Wicket (LBW) in Cricket\n\nA batter is out LBW if a ball hits their body (usually the legs) and would have gone on to hit the stumps, even if it didn't actually make contact with the wicket.\n\n**Key conditions:**\n- The ball must be pitched in line with the stumps or outside leg stump\n- The batter's body must be between the ball and the stumps\n- The ball must be heading toward the stumps (judged by the umpire)\n- The batter cannot be out LBW if they're outside the crease attempting to play a normal cricket shot, or if the ball pitches outside leg stump\n\nThe umpire makes the judgment call on whether the ball would have hit the stumps. It's one of cricket's most debated decisions because it requires predicting the ball's trajectory.",
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "13"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "11"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "15"
+      }
+    ]
+  },
+  {
+    "question": "Compare Messi vs Ronaldo's World Cup record",
+    "rag1": "I could not find this in the available sources.\n\nWhile the retrieved chunks reference World Cup records for both Messi and Ronaldo (including mentions of \"Messi and Ronaldo - World Cup Stats\" and \"The World Cup records Messi owns\"), the actual substantive comparison data is not included in these excerpts. The chunks provided are primarily bibliography/citation lists and headers rather than the detailed statistics needed to compare their World Cup records.\n\nTo answer your question properly, I would need access to chunks containing their actual goal tallies, appearances, assists, and other World Cup performance metrics.",
+    "rag2": "I could not find this in the available sources.\n\nWhile the retrieved chunks reference World Cup records for both Messi and Ronaldo (including mentions of \"Messi and Ronaldo - World Cup Stats\" and \"The World Cup records Messi owns\"), the actual substantive comparison data is not included in the text provided. The chunks contain mostly bibliography entries, citations, and URLs rather than the detailed statistics needed to compare their World Cup records.\n\nTo answer your question properly, I would need chunks containing specific information about their goals, appearances, assists, and other World Cup statistics.",
+    "plain1": "# Messi vs Ronaldo World Cup Record\n\n**Messi** has the superior World Cup legacy:\n- **2022 World Cup winner** with Argentina (his crowning achievement)\n- 7 World Cup appearances (1 goal away from tying Pel\u00e9's record of 12)\n- 2 finals appearances (won 2022, lost 2014)\n- Consistently performed in knockout stages\n\n**Ronaldo** has a solid but less decorated record:\n- 5 World Cup appearances across multiple decades\n- Never won the tournament (best finish: 3rd place in 2006)\n- 7 goals in World Cups\n- More inconsistent performances in later tournaments\n\n**The verdict:** Messi's 2022 World Cup victory, combined with his consistent excellence throughout his tournament appearances, gives him a clear edge. Ronaldo's longevity is impressive, but he never captured the ultimate prize, which significantly impacts the comparison. For many, Messi's World Cup triumph finally settled the \"GOAT\" debate in his favor.",
+    "plain2": "# Messi vs Ronaldo World Cup Record\n\n**Messi** has the superior World Cup legacy. He won the 2022 FIFA World Cup with Argentina, finally achieving his career's biggest goal. He's played in 5 World Cups (2006-2022), scored 7 goals, and was named to multiple All-Star teams.\n\n**Ronaldo** has never won a World Cup despite playing in 5 tournaments (2006-2018). He scored 7 goals across those competitions and reached the 2006 final with Portugal but lost to France.\n\nThe key difference: **Messi delivered a World Cup title**, which was the missing piece in his legacy. While both had similar goal tallies, Messi's 2022 triumph\u2014where he was instrumental in Argentina's run\u2014gives him the edge in World Cup history. Ronaldo's lack of a World Cup win remains his biggest career regret.",
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "20"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "24"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "29"
+      }
+    ]
+  },
+  {
+    "question": "Which country dominates the most sports at World Cup level?",
+    "rag1": "I can answer this question for each sport based on the retrieved sources:\n\n**Cricket:** Australia dominates, with 6 World Cup titles (1987, 1999, 2003, 2007, 2015, 2023) (cricket, history, page 10).\n\n**Soccer:** Brazil dominates, with 5 World Cup titles and being \"the only nation to have played in every World Cup (22) to date\" (soccer, history, page 12).\n\n**Rugby:** South Africa and New Zealand are the top performers. South Africa has won 4 titles (1995, 2007, 2019, 2023), while New Zealand has won 3 titles (1987, 2011, 2015) (rugby, history, page 8).\n\n**Overall conclusion:** No single country dominates across all three sports at World Cup level. Australia leads in cricket, Brazil leads in soccer, and South Africa leads in rugby. If measuring by total World Cup victories across all three sports, the available sources do not provide enough information to make a definitive cross-sport comparison.",
+    "rag2": "I can answer this question for each sport based on the retrieved sources:\n\n**Cricket:** Australia dominates, with 6 World Cup titles (1987, 1999, 2003, 2007, 2015, 2023) \u2014 more than any other nation (cricket, history, page 10).\n\n**Soccer:** Brazil dominates, with 5 World Cup titles and being \"the only nation to have played in every World Cup (22) to date\" (soccer, history, page 12).\n\n**Rugby:** South Africa and New Zealand are the top performers. South Africa has won 4 titles (1995, 2007, 2019, 2023), while New Zealand has won 3 titles (1987, 2011, 2015) (rugby, history, page 8).\n\n**Overall conclusion:** No single country dominates across all three sports at World Cup level. Australia leads in cricket, Brazil in soccer, and South Africa in rugby. If forced to identify the most dominant across sports, **Brazil and Australia** stand out as the most successful, each dominating their respective major sport.",
+    "plain1": "# World Cup Dominance by Country\n\n**Brazil** is arguably the most dominant country across multiple sports at World Cup level:\n\n- **Football (Soccer)**: 5 World Cup titles (most of any nation)\n- **Volleyball**: Multiple World Cup wins in both men's and women's competitions\n- **Futsal**: Strong World Cup performances\n\nHowever, if you're asking about a single sport specifically, **France** has been exceptionally dominant in football recently, winning 2 of the last 3 World Cups (2018, 2022). **Germany** and **Italy** are also historically dominant in football.\n\nFor **rugby**, **New Zealand** has been the most successful at World Cup level with 3 titles.\n\nThe answer depends on whether you mean dominance across multiple sports or within a single sport. Brazil's success spans the most different World Cup competitions, while France currently leads in football specifically.",
+    "plain2": "# World Cup Dominance by Country\n\n**Brazil** is arguably the most dominant country across multiple sports at World Cup level:\n\n- **Football (Soccer)**: 5 World Cup titles (most of any nation)\n- **Volleyball**: Multiple World Cup wins in both men's and women's competitions\n- **Futsal**: Strong performances in FIFA Futsal World Cup\n\nHowever, if you're asking about a single sport specifically, **Germany and France** are also dominant in football with 4 World Cup titles each. \n\nThe answer depends on whether you mean dominance in one sport or across multiple sports. Brazil's success spans the most different World Cup competitions, making it the strongest overall contender for \"most dominant across sports.\"",
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "10"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "1"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "16"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "12"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "21"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "7"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "history",
+        "page": "3"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "history",
+        "page": "8"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "history",
+        "page": "8"
+      }
+    ]
+  },
+  {
+    "question": "How many wickets did Shane Bond take in the 2007 World Cup?",
+    "rag1": "I could not find this in the available sources. The retrieved chunks contain information about Glenn McGrath taking 26 wickets at the 2007 World Cup (cricket, records, page 24), but they do not include any information about Shane Bond's wicket tally in that tournament.",
+    "rag2": "I could not find this in the available sources. The retrieved chunks contain information about Glenn McGrath taking 26 wickets at the 2007 World Cup (cricket, records, page 24), but they do not include any information about Shane Bond's wicket tally in that tournament.",
+    "plain1": "Shane Bond took 13 wickets in the 2007 Cricket World Cup, finishing as the tournament's leading wicket-taker. He had an outstanding tournament for New Zealand, playing a key role in their run to the final, where they lost to Australia.",
+    "plain2": "Shane Bond took 13 wickets in the 2007 Cricket World Cup, finishing as the tournament's leading wicket-taker. He had an outstanding tournament for New Zealand, playing a key role in their run to the final, where they lost to Australia.",
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "records",
+        "page": "20"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "records",
+        "page": "24"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "records",
+        "page": "22"
+      }
+    ]
+  }
+]

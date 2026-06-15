@@ -1,0 +1,245 @@
+{
+  "what year was the latest soccer world cup": {
+    "answer": "Based on the retrieved sources, the latest soccer World Cup mentioned was in **2014**, held in Brazil. The sources reference World Cup tournaments through 2014, with Lionel Messi listed as a key player from that tournament.\n\nHowever, I should note that these sources appear to be historical documents, and there may have been more recent World Cups that are not covered in the retrieved chunks provided.",
+    "route": {
+      "category": "history",
+      "sports": [
+        "soccer"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "27"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "20"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "11"
+      }
+    ]
+  },
+  "how many times has brazil won the world cup": {
+    "answer": "Brazil has won the World Cup **five times**, making them the most successful World Cup team in history. They are also the only nation to have played in every World Cup tournament to date. Brazil were the first team to win the World Cup for the third time (1970), the fourth time (1994), and the fifth time (2002).",
+    "route": {
+      "category": "history",
+      "sports": [
+        "soccer"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "12"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "21"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "records",
+        "page": "21"
+      }
+    ]
+  },
+  "how did virat play in the last world cup": {
+    "answer": "I could not find this in the available sources. The retrieved chunks contain only citation information and references to Virat Kohli's all-time World Cup run record (noting he overtook Ricky Ponting for second place behind Sachin Tendulkar as of November 2023), but they do not include details about his specific performance in the most recent World Cup tournament\u2014such as his batting statistics, number of matches played, or how India performed overall.\n\nTo answer your question properly, I would need sources with match reports, scorecard data, or tournament summaries from the last World Cup.",
+    "route": {
+      "category": "history",
+      "sports": [
+        "cricket"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "19"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "records",
+        "page": "46"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "8"
+      }
+    ]
+  },
+  "messi vs ronaldo": {
+    "answer": "I could not find this in the available sources.\n\nThe retrieved chunks contain some World Cup tournament data (including that Lionel Messi won an award in 2014 and Ronaldo scored goals in 1998 and 2002), but they do not include substantive comparative information about Messi vs. Ronaldo\u2014such as their career statistics, achievements, playing styles, or head-to-head records that would allow for a meaningful comparison between the two players.\n\nTo answer your question properly, I would need sources with detailed career data, records, and analysis of both players.",
+    "route": {
+      "category": "comparison",
+      "sports": [
+        "soccer"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "20"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "rules",
+        "page": "1"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "19"
+      }
+    ]
+  },
+  "what are the rules for leg before wicket in cricket": {
+    "answer": "# Leg Before Wicket (LBW) Rules\n\nAccording to cricket law, a batter is out leg before wicket if:\n\n1. **The ball hits the batter's body** without first hitting the bat\n2. **The ball would have hit the wicket** if the batter had not been in the way\n3. **The ball did not pitch on the leg side** of the wicket\n\nHowever, there is an important exception: **if the ball strikes the batter outside the line of the off-stump while the batter was attempting to play a stroke, the batter is not out.**\n\nIn essence, LBW protects batters from being dismissed when they legitimately attempt to play a shot but miss, while preventing them from using their body as an illegal shield to protect the wicket.",
+    "route": {
+      "category": "rules",
+      "sports": [
+        "cricket"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "13"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "11"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "15"
+      }
+    ]
+  },
+  "how many players are there in rugby": {
+    "answer": "# Number of Players in Rugby\n\nThe number of players in rugby depends on the format:\n\n**Rugby Union (standard format):** Each team has **15 players** on the field. The game is played over 80 minutes, divided into two 40-minute halves.\n\n**Rugby Sevens:** Each team has **7 players** on the field. Games last 14 minutes (two 7-minute halves), except for finals which can have two 10-minute halves. Teams can nominate five substitutes, but only three may play in any one game.\n\n**Under 19 variations:** Teams have **22 players** available, with at least 6 required to play in the front row.",
+    "route": {
+      "category": "rules",
+      "sports": [
+        "rugby"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "14"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "8"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "4"
+      }
+    ]
+  },
+  "how many players in soccer": {
+    "answer": "I could not find this in the available sources.\n\nThe retrieved chunks contain information about World Cup tournament statistics and citations about soccer rules, but they do not include information about how many players are on a soccer team or field during a match. To answer your question properly, I would need a source that covers team composition or the Laws of the Game that specify player numbers.",
+    "route": {
+      "category": "rules",
+      "sports": [
+        "soccer"
+      ],
+      "sub_queries": {}
+    },
+    "chunks_used": 3,
+    "sources": [
+      {
+        "sport": "soccer",
+        "content_type": "history",
+        "page": "20"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "rules",
+        "page": "10"
+      },
+      {
+        "sport": "soccer",
+        "content_type": "rules",
+        "page": "1"
+      }
+    ]
+  },
+  "how many players in rugby vs cricket": {
+    "answer": "# Player Numbers in Rugby vs Cricket\n\n**Cricket:** A cricket team consists of **11 players**, including a captain. While teams can agree to play more than eleven-a-side outside official competitions, no more than eleven players may field at any time.\n\n**Rugby:** Rugby union is played with **15 players** per team. In rugby sevens (a variant), teams have **7 players** on the field.\n\nSo in standard formats, rugby union has 15 players per side compared to cricket's 11 players per side.",
+    "route": {
+      "category": "cross_sport",
+      "sports": [
+        "cricket",
+        "rugby"
+      ],
+      "sub_queries": {
+        "cricket": "How many players are on a cricket team?",
+        "rugby": "How many players are on a rugby team?"
+      }
+    },
+    "chunks_used": 6,
+    "sources": [
+      {
+        "sport": "cricket",
+        "content_type": "rules",
+        "page": "6"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "11"
+      },
+      {
+        "sport": "cricket",
+        "content_type": "history",
+        "page": "17"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "14"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "4"
+      },
+      {
+        "sport": "rugby",
+        "content_type": "rules",
+        "page": "8"
+      }
+    ]
+  }
+}

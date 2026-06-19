@@ -1,0 +1,825 @@
+{
+  "name": "SpeakMark — Agent 2: Progress Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "progress-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "81efcc25-04e3-4730-9d3f-d130682afa90",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -992,
+        -64
+      ],
+      "webhookId": "bc2e24ee-b5c1-4175-afb8-7d7e25a8fb94"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Practice_Log",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Child_Name",
+              "lookupValue": "={{ $('Webhook').item.json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "50486f4f-b945-4552-ac02-473b5a4a3522",
+      "name": "Read Practice_Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -768,
+        -64
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Child_Profile",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Child_Name",
+              "lookupValue": "={{ $('Webhook').item.json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17d223bb-0f4e-474c-b718-f775b78962e3",
+      "name": "Read Child_Profile",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -768,
+        112
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhookData = $('Webhook').item.json.body;\nconst logRows = $('Read Practice_Log').all();\n\n// Sort log by Session_ID descending, take last 10\nconst sortedLog = logRows\n  .map(r => r.json)\n  .filter(r => r.Child_Name === webhookData.child)\n  .sort((a, b) => Number(b.Session_ID?.replace('S','')) - Number(a.Session_ID?.replace('S','')))\n  .slice(0, 10);\n\nconst newSession = {\n  session_date:  webhookData.session_date,\n  duration_mins: webhookData.duration_mins,\n  difficulty:    webhookData.difficulty,\n  accuracy_pct:  webhookData.accuracy_pct,\n  target_sounds: webhookData.target_sounds,\n  notes:         webhookData.notes,\n};\n\nreturn [{\n  json: {\n    child:          webhookData.child,\n    profile:        {},\n    newSession,\n    recentSessions: sortedLog,\n    webhookData,\n  }\n}];"
+      },
+      "id": "f856442d-86bb-4267-8e90-e7e9fb4ed6f1",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -544,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-6"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are SpeakMark's Progress Analysis Agent for children's speech therapy home practice.\n\nYour job:\n1. Analyse the child's recent practice sessions\n2. Classify the overall trend\n3. Recommend an action for the parent\n4. Decide if a difficulty level change is warranted\n\nChild profile:\n{{ JSON.stringify($('Merge Data').item.json.profile) }}\n\nNew session just logged:\n{{ JSON.stringify($('Merge Data').item.json.newSession) }}\n\nLast 10 sessions (most recent first):\n{{ JSON.stringify($('Merge Data').item.json.recentSessions) }}\n\nRespond ONLY in this exact JSON format (no markdown, no extra text):\n{\n  \"trend\": \"Improving\" | \"Stable\" | \"Struggling\" | \"Possible Regression\",\n  \"recommendation\": \"Keep current exercises\" | \"Increase difficulty\" | \"Reduce difficulty\" | \"Try alternative exercise\" | \"Therapist review recommended\",\n  \"needs_hitl_approval\": true | false,\n  \"proposed_level\": \"Sound\" | \"Word\" | \"Phrase\" | \"Sentence\",\n  \"analysis\": \"2-4 sentence plain-English explanation for the parent\",\n  \"decision_notes\": \"Internal reasoning for the log\",\n  \"escalate_to_therapist\": true | false\n}\n\nRules:\n- needs_hitl_approval = true ONLY when recommending a difficulty change\n- proposed_level = current level when no change recommended\n- escalate_to_therapist = true when accuracy below 40% for 3+ sessions OR Possible Regression"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        32
+      ],
+      "id": "2e53c749-c676-4bd7-b526-69f7e27c8d6f",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "yzHAWxvsqaBuHu6B",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content[0].text.trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(raw);\n} catch (e) {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  parsed = match ? JSON.parse(match[0]) : {};\n}\n\nconst webhook = $('Webhook').item.json.body;\n\nreturn [{\n  json: {\n    Session_ID:            `S${Date.now()}`,\n    Child_ID:              webhook.child,\n    Child_Name:            webhook.child,\n    Date:                  webhook.session_date,\n    Practice_Level:        webhook.difficulty,\n    Target_Sound:          webhook.target_sounds,\n    Duration_Minutes:      webhook.duration_mins,\n    Raw_Parent_Note:       webhook.notes,\n    Practice_Rating_Score: webhook.accuracy_pct,\n    Practice_Completed:    'Yes',\n    Agent_Decision:        parsed.recommendation || '',\n    Escalation_Flag:       parsed.escalate_to_therapist ? 'Yes' : 'No',\n    HITL_Status:           parsed.needs_hitl_approval ? 'Pending' : 'N/A',\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        32
+      ],
+      "id": "d07e5ec9-8b25-4105-bafd-38bed8f1050d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Practice_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Session_ID",
+              "displayName": "Session_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Child_ID",
+              "displayName": "Child_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Child_Name",
+              "displayName": "Child_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Age",
+              "displayName": "Age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Week_Ending",
+              "displayName": "Week_Ending",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Therapist_Material_ID",
+              "displayName": "Therapist_Material_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target_Sound",
+              "displayName": "Target_Sound",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Primary_Error_Pattern",
+              "displayName": "Primary_Error_Pattern",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Practice_Level",
+              "displayName": "Practice_Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Exercise_Type",
+              "displayName": "Exercise_Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Practice_Completed",
+              "displayName": "Practice_Completed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Parent_Rating",
+              "displayName": "Parent_Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Practice_Rating_Score",
+              "displayName": "Practice_Rating_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Words_Practiced",
+              "displayName": "Words_Practiced",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Raw_Parent_Note",
+              "displayName": "Raw_Parent_Note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Voice_Note_Used",
+              "displayName": "Voice_Note_Used",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Parent_Reviewed_Note",
+              "displayName": "Parent_Reviewed_Note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Structured_Observation",
+              "displayName": "Structured_Observation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "What_Went_Well",
+              "displayName": "What_Went_Well",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "What_Was_Hard",
+              "displayName": "What_Was_Hard",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Child_Response",
+              "displayName": "Child_Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Question_For_SLP",
+              "displayName": "Question_For_SLP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Duration_Minutes",
+              "displayName": "Duration_Minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Agent_Decision",
+              "displayName": "Agent_Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Escalation_Flag",
+              "displayName": "Escalation_Flag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "HITL_Status",
+              "displayName": "HITL_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "_parsed",
+              "displayName": "_parsed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        176,
+        32
+      ],
+      "id": "03872973-c117-46f2-a6ca-a11b67aa76c6",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Code in JavaScript').first().json;\nconst webhook = $('Webhook').item.json.body;\n\nconst raw = $('Message a model').first().json.content[0].text.trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(raw);\n} catch (e) {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  parsed = match ? JSON.parse(match[0]) : {};\n}\n\nconst now = new Date().toISOString().slice(0, 10);\n\nreturn [{\n  json: {\n    Decision_ID:             `D${Date.now()}`,\n    Child_ID:                webhook.child,\n    Date:                    now,\n    Agent_Name:              'Progress_Analysis',\n    Observation:             parsed.analysis || '',\n    Decision:                parsed.recommendation || '',\n    Reason:                  parsed.decision_notes || '',\n    Confidence:              'High',\n    Human_Approval_Required: parsed.needs_hitl_approval ? 'Yes' : 'No',\n    Parent_Response:         parsed.needs_hitl_approval ? 'Pending' : 'N/A',\n    Write_Action:            parsed.proposed_level || webhook.difficulty,\n    Status:                  parsed.escalate_to_therapist ? 'Escalate' : 'Active',\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        32
+      ],
+      "id": "fd438b01-0d57-4906-9a86-bfe14f83de2e",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agent_Decisions",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Decision_ID",
+              "displayName": "Decision_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Child_ID",
+              "displayName": "Child_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Agent_Name",
+              "displayName": "Agent_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Observation",
+              "displayName": "Observation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Human_Approval_Required",
+              "displayName": "Human_Approval_Required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Parent_Response",
+              "displayName": "Parent_Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Write_Action",
+              "displayName": "Write_Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        592,
+        32
+      ],
+      "id": "4afc1dcd-5446-4282-9839-c64f074abe90",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"ok\",\n  \"trend\": \"{{ $('Code in JavaScript1').item.json.Decision }}\",\n  \"recommendation\": \"{{ $('Code in JavaScript1').item.json.Decision }}\",\n  \"analysis\": \"{{ $('Code in JavaScript1').item.json.Observation }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        768,
+        48
+      ],
+      "id": "d64939bf-d755-476b-87a9-f1dd1c45af62",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "nehmeh.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.2",
+            "content-length": "156",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "2600:4040:a31c:7600:1924:a20d:a70f:9e79",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "a0e31a041c70ffd0-EWR",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "2600:4040:a31c:7600:1924:a20d:a70f:9e79, 162.158.63.67",
+            "x-forwarded-host": "nehmeh.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-28-7f7c7c49f-68dnw",
+            "x-is-trusted": "yes",
+            "x-real-ip": "2600:4040:a31c:7600:1924:a20d:a70f:9e79"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "child": "Emma",
+            "session_date": "2025-01-15",
+            "duration_mins": 15,
+            "difficulty": "Word",
+            "accuracy_pct": 72,
+            "target_sounds": "/s/, /sh/",
+            "notes": "Good focus today"
+          },
+          "webhookUrl": "https://nehmeh.app.n8n.cloud/webhook/progress-analysis",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read Practice_Log",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Child_Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Practice_Log": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Child_Profile": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7876c0ba-03ab-4f27-9df8-cad474d87f55",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9d4d77ffedd9691e57490c5c3164bc897d2d70d6fcbc4eaab705dac5b084df6"
+  },
+  "nodeGroups": [],
+  "id": "4Cz5Ln3boASkB4fI",
+  "tags": []
+}

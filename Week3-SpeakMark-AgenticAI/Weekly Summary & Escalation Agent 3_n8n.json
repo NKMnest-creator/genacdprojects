@@ -1,0 +1,310 @@
+{
+  "name": "SpeakMark — Agent 3: Weekly Summary & Escalation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "weekly-summary",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "756b3292-c7bc-412f-8bec-d8f9e8ca22a5",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        80
+      ],
+      "webhookId": "9ba6b741-a639-411b-b31c-ad12ad8af57f"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Practice_Log",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Child_Name",
+              "lookupValue": "={{ $('Webhook').item.json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2b928f9e-8f15-4f1a-a815-d8f782cd7562",
+      "name": "Read Practice_Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agent_Decisions",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Child_ID",
+              "lookupValue": "={{ $('Webhook').item.json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "430bc901-9486-4f1f-a9a1-418d60f2cbe0",
+      "name": "Read Agent_Decisions",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        160
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Child_Profile",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Child_Name",
+              "lookupValue": "={{ $('Webhook').item.json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d103ad1d-3227-4204-8ce3-d54657827828",
+      "name": "Read Child_Profile",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        320
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhook = $('Webhook').item.json.body;\n\nlet logRows = [];\nlet decisionRows = [];\nlet profile = {};\n\ntry { logRows = $('Read Practice_Log').all().map(r => r.json); } catch(e) {}\ntry { decisionRows = $('Read Agent_Decisions').all().map(r => r.json); } catch(e) {}\ntry { profile = $('Read Child_Profile').first()?.json || {}; } catch(e) {}\n\nconst sessionCount = logRows.length;\nconst avgAccuracy = sessionCount\n  ? Math.round(logRows.reduce((s, r) => s + Number(r.Practice_Rating_Score || 0), 0) / sessionCount)\n  : 0;\nconst totalMins = logRows.reduce((s, r) => s + Number(r.Duration_Minutes || 0), 0);\n\nreturn [{\n  json: {\n    child: webhook.child,\n    week_start: webhook.week_start,\n    include_therapist: webhook.include_therapist,\n    profile,\n    weekSessions: logRows,\n    weekDecisions: decisionRows,\n    stats: { sessionCount, avgAccuracy, totalMins }\n  }\n}];"
+      },
+      "id": "86ddb76c-63e1-4958-92f6-2190f2f3da90",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Claude's JSON response\nconst raw = $json.content[0].text.trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(raw);\n} catch(e) {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  parsed = match ? JSON.parse(match[0]) : {};\n}\n\nconst webhook = $('Webhook').item.json.body;\nconst summaryId = `WS${Date.now()}`;\n\n// Row to write to Weekly_Summaries (only after parent approval — done via /save endpoint)\nconst summaryRow = {\n  Summary_ID:          summaryId,\n  Child_Name:          webhook.child,\n  Week_Start:          webhook.week_start,\n  Summary_Text:        parsed.summary || '',\n  Escalation_Flag:     parsed.escalation_flag ? 'Yes' : 'No',\n  Escalation_Reason:   parsed.escalation_reason || '',\n  Therapist_Draft:     parsed.therapist_draft || '',\n  Therapist_Approved:  'Pending',\n  Next_Week_Focus:     parsed.next_week_focus || '',\n  Generated_Date:      new Date().toISOString().slice(0, 10),\n};\n\nreturn [{\n  json: {\n    parsed,\n    summaryId,\n    summaryRow,\n  }\n}];"
+      },
+      "id": "375ce7a9-216c-4b55-90ef-a15e394bdd3e",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  \"summary\":           $('Parse Claude Response').item.json.parsed.summary,\n  \"escalation_flag\":   $('Parse Claude Response').item.json.parsed.escalation_flag,\n  \"escalation_reason\": $('Parse Claude Response').item.json.parsed.escalation_reason,\n  \"therapist_draft\":   $('Parse Claude Response').item.json.parsed.therapist_draft,\n  \"highlights\":        $('Parse Claude Response').item.json.parsed.highlights,\n  \"next_week_focus\":   $('Parse Claude Response').item.json.parsed.next_week_focus,\n  \"summary_id\":        $('Parse Claude Response').item.json.summaryId\n}) }}",
+        "options": {}
+      },
+      "id": "c694bbee-12c3-4d1d-aa6c-eb4116de36a4",
+      "name": "Respond to Streamlit",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        912,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-6"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are SpeakMark's Weekly Summary & Escalation Agent.\n\nChild: {{ $('Merge Data').item.json.child }}\nWeek of: {{ $('Merge Data').item.json.week_start }}\n\nSessions this week: {{ $('Merge Data').item.json.stats.sessionCount }}\nAverage accuracy: {{ $('Merge Data').item.json.stats.avgAccuracy }}%\nTotal practice time: {{ $('Merge Data').item.json.stats.totalMins }} mins\n\nSession details:\n{{ JSON.stringify($('Merge Data').item.json.weekSessions) }}\n\nAgent decisions this week:\n{{ JSON.stringify($('Merge Data').item.json.weekDecisions) }}\n\nWrite a warm 3-5 sentence parent-friendly weekly summary. Then decide if therapist escalation is needed (true if avg accuracy below 45%, or regression detected, or 0 sessions).\n\nRespond ONLY in this exact JSON format, no markdown:\n{\n  \"summary\": \"3-5 sentence parent-friendly summary\",\n  \"escalation_flag\": true or false,\n  \"escalation_reason\": \"one sentence or empty string\",\n  \"therapist_draft\": \"brief therapist update or empty string\",\n  \"next_week_focus\": \"one sentence recommendation\"\n}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        400,
+        160
+      ],
+      "id": "d74e0046-2842-408e-b28b-cb112d07951d",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "yzHAWxvsqaBuHu6B",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read Practice_Log",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Agent_Decisions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Child_Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Practice_Log": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Agent_Decisions": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Child_Profile": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Streamlit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e804971f-0373-466f-8fe7-fab89f6fe8f0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9d4d77ffedd9691e57490c5c3164bc897d2d70d6fcbc4eaab705dac5b084df6"
+  },
+  "nodeGroups": [],
+  "id": "rOyCtrQaWEjjrdkT",
+  "tags": []
+}

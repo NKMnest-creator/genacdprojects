@@ -1,0 +1,158 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "practice-plan",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6e73528d-efc6-46b7-b0bd-a02a455532bd",
+      "name": "Webhook",
+      "webhookId": "eebbfa0b-1006-4dd3-96a3-3af021a08ea3"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"plan\": {{ JSON.stringify($json.content[0].text) }} }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        784,
+        0
+      ],
+      "id": "e99a7f0e-fb13-4dc9-874e-5a9b615d0d7e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg",
+          "mode": "list",
+          "cachedResultName": "SpeakMark_Memory_Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pAa9Cq7wDI8XhdAfYqLP4-uWiJi2BLZBFsfhUyt1dyg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Child_Profile",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Child_Name",
+              "lookupValue": "={{ $json.body.child }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1058977b-c7b7-4428-9757-48982d54a20a",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IJcoIhq6t35B7vUw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-6"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are the SpeakMark Practice Planning Agent. Create a short, age-appropriate home speech practice plan. Do not diagnose.\n\nChild age: {{ $json.Age }}\nTarget sound: {{ $json.Target_Sound }}\nCurrent level: {{ $json.Current_Level }}\nError pattern: {{ $json.Primary_Error_Pattern }}\nHome focus: {{ $json.Home_Practice_Focus }}\n\nReturn a short word/sentence list, one practice activity, a parent tip, and whether parent approval is needed for any level change. Keep it practical and warm for a parent."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "e2757295-d49c-42d9-864f-bb0ec8151fc2",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "yzHAWxvsqaBuHu6B",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f762bf38-0ef9-4296-a821-3efa0743e381",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9d4d77ffedd9691e57490c5c3164bc897d2d70d6fcbc4eaab705dac5b084df6"
+  },
+  "nodeGroups": [],
+  "id": "L9dYJqWWDh7qVeCy",
+  "tags": []
+}

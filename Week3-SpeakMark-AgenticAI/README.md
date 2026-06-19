@@ -127,15 +127,13 @@ streamlit run app.py
 `Webhook → Read Child_Profile → Message a Model (Claude) → Respond`
 <img width="1361" height="402" alt="image" src="https://github.com/user-attachments/assets/55aed533-de1e-450f-8866-865d1e60fed5" />
 
-
 ### Agent 2 — Progress Analysis
 `Webhook → Read Practice_Log + Read Child_Profile → Merge Data → Message a Model (Claude) → Parse Response → Append to Practice_Log + Append to Agent_Decisions → Respond`
+<img width="1517" height="367" alt="image" src="https://github.com/user-attachments/assets/b765f575-1c85-4d71-a66f-757e75d4bb4c" />
 
 ### Agent 3 — Weekly Summary
 `Webhook → Read Practice_Log + Read Agent_Decisions + Read Child_Profile → Merge Data → Message a Model (Claude) → Parse Response → Respond`
-
-### Agent 3 Save Sub-flow (HITL)
-`Webhook → Build Row → Append to Weekly_Summaries → Respond`
+<img width="1502" height="571" alt="image" src="https://github.com/user-attachments/assets/9a929a20-60d5-4908-8c3c-fda2afdce30b" />
 
 ---
 

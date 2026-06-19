@@ -125,6 +125,8 @@ streamlit run app.py
 
 ### Agent 1 — Practice Plan
 `Webhook → Read Child_Profile → Message a Model (Claude) → Respond`
+<img width="1361" height="402" alt="image" src="https://github.com/user-attachments/assets/55aed533-de1e-450f-8866-865d1e60fed5" />
+
 
 ### Agent 2 — Progress Analysis
 `Webhook → Read Practice_Log + Read Child_Profile → Merge Data → Message a Model (Claude) → Parse Response → Append to Practice_Log + Append to Agent_Decisions → Respond`
